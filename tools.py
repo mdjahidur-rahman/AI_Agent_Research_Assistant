@@ -24,27 +24,6 @@ def wikipedia(query: str) -> str:
     """
     return wiki.run(query)
 
-# # Save to file tool
-# def save_to_file(content: str, filename: str = None) -> str:
-#     """
-#     Saves the given content to a text file.
-#     Returns the file name as confirmation.
-#     """
-#     if filename is None:
-#         # Generate filename based on timestamp
-#         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-#         filename = f"research_{timestamp}.txt"
-
-#     with open(filename, "w", encoding="utf-8") as f:
-#         f.write(content)
-    
-#     return f"Saved to {filename}"
-
-# save_tool = {
-#     "name": "save_to_file",
-#     "func": save_to_file,
-#     "description": "Saves the output text to a local file"
-# }
 
 # List of all tools for the agent
 all_tools = [search, wikipedia]

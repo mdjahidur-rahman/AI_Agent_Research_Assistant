@@ -1,64 +1,3 @@
-# from dotenv import load_dotenv
-# from pydantic import BaseModel
-# from langchain_openai import ChatOpenAI
-# from langchain_anthropic import ChatAnthropic
-# from langchain_core.prompts import ChatPromptTemplate
-# from langchain_core.output_parsers import PydanticOutputParser
-# from langchain.agents import create_tool_calling_agent, AgentExecutor
-# from tools import search_tool, wiki_tool, save_tool
-
-# from dotenv import load_dotenv
-# from langchain_anthropic import ChatAnthropic
-
-
-# load_dotenv()
-
-# llm = ChatAnthropic(
-#     model="claude-3-5-sonnet-20241022",
-#     temperature=0
-# )
-
-# response = llm.invoke("Why is Hawaii special?")
-# print(response.content)
-
-
-# from dotenv import load_dotenv
-# from pydantic import BaseModel
-# from langchain_openai import ChatOpenAI
-# from langchain_core.prompts import ChatPromptTemplate
-# from langchain_core.output_parsers import PydanticOutputParser
-# # from langchain.agents import create_tool_calling_agent
-# from langchain.agents import AgentExecutor
-# from langchain.agents.tool_calling_agent import create_tool_calling_agent
-
-# load_dotenv()
-
-# class ResearchResponse(BaseModel):
-#     topic: str
-#     summary : str
-#     sources : list[str]
-#     tools_used : list[str]
-
-# llm = ChatOpenAI(
-#     model="gpt-4o-mini",
-#     temperature=0
-# )
-# # response = llm.invoke("Why is Hawaii special?")
-# # print(response)
-
-# parser = PydanticOutputParser(pydantic_object=ResearchResponse)
-
-
-
-
-# agent = create_tool_calling_agent(
-#     llm = llm,
-#     prompt = prompt,
-#     tools = []
-# )
-
-
-
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
@@ -71,26 +10,26 @@ from tools import save_research_to_file
 # Load your API key from .env
 load_dotenv()
 
-# -------------------------------
-# 1️⃣ Define structured output
-# -------------------------------
+
+#  Define structured output
+
 class ResearchResponse(BaseModel):
     topic: str
     summary: str
     sources: list[str]
     tools_used: list[str]
 
-# -------------------------------
-# 2️⃣ Initialize the LLM
-# -------------------------------
+
+# Initialize the LLM
+
 llm = ChatOpenAI(
     model="gpt-4o-mini",
     temperature=0
 )
 
-# -------------------------------
-# 3️⃣ Define the system prompt
-# -------------------------------
+
+# Define the system prompt
+
 system_prompt = """
 You are a research assistant.
 
@@ -115,34 +54,40 @@ You have access to the following tools:
 Do not include any text outside the JSON.
 """
 
-# -------------------------------
-# 4️⃣ Create the agent
-# -------------------------------
+
+# Create the agent
+
 agent = create_agent(
     model=llm,
     tools=all_tools,
     system_prompt=system_prompt
 )
 
-# -------------------------------
-# 5️⃣ Run the agent
-# -------------------------------
+
+# Run the agent
+
 user_question = input("Enter your research query: ")
 
 response = agent.invoke(
-    {"messages": [{"role": "user", "content": user_question}]}
+    {"messages": [
+        {
+            "role": "user", 
+            "content": user_question
+        }
+     ]
+    }
 )
 
-# -------------------------------
-# 6️⃣ Parse the output into Python object
-# -------------------------------
+
+# Parse the output into Python object
+
 parser = PydanticOutputParser(pydantic_object=ResearchResponse)
 
 parsed_response = parser.parse(response["messages"][-1].content)
 
-# -------------------------------
-# 7️⃣ Show results
-# -------------------------------
+
+# Show results
+
 print("Raw response from LLM:")
 print(response["messages"][-1].content)
 print("\nParsed response:")
